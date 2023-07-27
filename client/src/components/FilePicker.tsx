@@ -7,7 +7,7 @@ const FilePicker = ({
 }: {
   file: File | null;
   setFile: (file: File | null) => void;
-  readFile: (type: 'logo' | 'full') => void; 
+  readFile: (type: 'logo' | 'full') => void;
 }) => {
   return (
     <div className="filepicker-container">

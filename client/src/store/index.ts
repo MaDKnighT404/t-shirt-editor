@@ -1,6 +1,5 @@
 import { proxy } from 'valtio';
 
-
 type State = {
   intro: boolean;
   color: string;

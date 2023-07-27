@@ -1,1 +1,3 @@
-# t-shirt editor
+# T-Shirt Editor
+
+## Deploy:

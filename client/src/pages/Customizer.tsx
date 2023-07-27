@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSnapshot } from 'valtio';
-import { download } from '../assets';
-import { downloadCanvasToImage, reader } from '../config/helpers';
+import { reader } from '../config/helpers';
 import { EditorTabs, FilterTabs, DecalTypes } from '../config/constants';
 import { fadeAnimation, slideAnimation } from '../config/motion';
 import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../components';
-import config from '../config/config';
 import state from '../store';
 
 type FilterTabKeys = 'logoShirt' | 'stylishShirt';
@@ -34,9 +32,7 @@ const Customizer = () => {
       case 'filepicker':
         return <FilePicker file={file} setFile={setFile} readFile={readFile} />;
       case 'aipicker':
-        return (
-          <AIPicker />
-        );
+        return <AIPicker />;
       default:
         return null;
     }
