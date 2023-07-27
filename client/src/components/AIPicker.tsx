@@ -1,11 +1,8 @@
-import React from 'react';
-
-import CustomButton from './CustomButton';
-
-const AIPicker = ({ prompt, setPrompt, generatingImg, handleSubmit }: { prompt: string }) => {
+const AIPicker = () => {
   return (
     <div className="aipicker-container">
-      <textarea
+      some func
+      {/* <textarea
         className="aipicker-textarea"
         placeholder="Ask AI..."
         rows={5}
@@ -32,7 +29,7 @@ const AIPicker = ({ prompt, setPrompt, generatingImg, handleSubmit }: { prompt: 
             />
           </>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

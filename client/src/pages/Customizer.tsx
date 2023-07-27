@@ -19,8 +19,6 @@ const Customizer = () => {
   const snap = useSnapshot(state);
 
   const [file, setFile] = useState<File | null>(null);
-  const [prompt, setPrompt] = useState('');
-  const [generatingImg, setGeneratingImg] = useState(false);
 
   const [activeEditorTab, setActiveEditorTab] = useState('');
   const [activeFilterTab, setActiveFilterTab] = useState<FilterTab>({
@@ -37,44 +35,39 @@ const Customizer = () => {
         return <FilePicker file={file} setFile={setFile} readFile={readFile} />;
       case 'aipicker':
         return (
-          <AIPicker
-            prompt={prompt}
-            setPrompt={setPrompt}
-            generatingImg={generatingImg}
-            handleSubmit={handleSubmit}
-          />
+          <AIPicker />
         );
       default:
         return null;
     }
   };
 
-  const handleSubmit = async (type) => {
-    if (!prompt) return alert('Please enter a prompt');
+  // const handleSubmit = async (type) => {
+  //   if (!prompt) return alert('Please enter a prompt');
 
-    try {
-      setGeneratingImg(true);
+  //   try {
+  //     setGeneratingImg(true);
 
-      const response = await fetch('http://localhost:8080/api/v1/dalle', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt,
-        }),
-      });
+  //     const response = await fetch('http://localhost:8080/api/v1/dalle', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         prompt,
+  //       }),
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      handleDecals(type, `data:image/png;base64,${data.photo}`);
-    } catch (error) {
-      alert(error);
-    } finally {
-      setGeneratingImg(false);
-      setActiveEditorTab('');
-    }
-  };
+  //     handleDecals(type, `data:image/png;base64,${data.photo}`);
+  //   } catch (error) {
+  //     alert(error);
+  //   } finally {
+  //     setGeneratingImg(false);
+  //     setActiveEditorTab('');
+  //   }
+  // };
 
   const handleActiveFilterTab = (tabName: FilterTabKeys) => {
     switch (tabName) {
