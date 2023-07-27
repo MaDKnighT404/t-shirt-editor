@@ -9,15 +9,21 @@ import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../compone
 import config from '../config/config';
 import state from '../store';
 
+type FilterTabKeys = 'logoShirt' | 'stylishShirt';
+type FilterTab = Record<FilterTabKeys, boolean>;
+
+type DecalTypeKeys = keyof typeof DecalTypes;
+type DecalResult = string;
+
 const Customizer = () => {
   const snap = useSnapshot(state);
 
-  const [file, setFile] = useState('');
+  const [file, setFile] = useState<File | null>(null);
   const [promt, setPromt] = useState('');
   const [generatingImg, setGeneratingImg] = useState(false);
 
   const [activeEditorTab, setActiveEditorTab] = useState('');
-  const [activeFilterTab, setActiveFilterTab] = useState({
+  const [activeFilterTab, setActiveFilterTab] = useState<FilterTab>({
     logoShirt: true,
     stylishShirt: false,
   });
@@ -28,12 +34,55 @@ const Customizer = () => {
       case 'colorpicker':
         return <ColorPicker />;
       case 'filepicker':
-        return <FilePicker />;
+        return <FilePicker file={file} setFile={setFile} readFile={readFile} />;
       case 'aipicker':
         return <AIPicker />;
       default:
         return null;
     }
+  };
+
+  const handleActiveFilterTab = (tabName: FilterTabKeys) => {
+    switch (tabName) {
+      case 'logoShirt':
+        state.isLogoTexture = !activeFilterTab[tabName];
+        break;
+      case 'stylishShirt':
+        state.isFullTexture = !activeFilterTab[tabName];
+        break;
+      default:
+        state.isLogoTexture = true;
+        state.isFullTexture = false;
+        break;
+    }
+
+    // after setting the state, activeFilterTab is updated
+
+    setActiveFilterTab((prevState: FilterTab) => {
+      return {
+        ...prevState,
+        [tabName]: !prevState[tabName],
+      };
+    });
+  };
+
+  const handleDecals = (type: DecalTypeKeys, result: DecalResult) => {
+    const decalType = DecalTypes[type];
+
+    state[decalType.stateProperty] = result;
+
+    const filterTabName = decalType.filterTab as keyof typeof activeFilterTab;
+    if (!activeFilterTab[filterTabName]) {
+      handleActiveFilterTab(filterTabName);
+    }
+  };
+
+  const readFile = (type: 'logo' | 'full') => {
+    if (!file) return;
+    reader(file).then((result) => {
+      handleDecals(type, result as string);
+      setActiveEditorTab('');
+    });
   };
 
   return (
@@ -71,9 +120,20 @@ const Customizer = () => {
           </motion.div>
 
           <motion.div className="filtertabs-container" {...slideAnimation('up')}>
-            {FilterTabs.map((tab) => (
-              <Tab key={tab.name} tab={tab} handleClick={() => {}} isFilterTab isActiveTab />
-            ))}
+            {FilterTabs.map((tab) => {
+              const name = tab.name as keyof typeof activeFilterTab;
+              return (
+                <Tab
+                  key={tab.name}
+                  tab={tab}
+                  isFilterTab
+                  isActiveTab={activeFilterTab[name]}
+                  handleClick={() => {
+                    handleActiveFilterTab(name);
+                  }}
+                />
+              );
+            })}
           </motion.div>
         </>
       )}
