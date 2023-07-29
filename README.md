@@ -1,3 +1,4 @@
 # T-Shirt Editor
 
-## Deploy:
+## Deploy: https://shirt-editor.netlify.app/
+
